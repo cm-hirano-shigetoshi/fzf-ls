@@ -1,0 +1,14 @@
+base_task:
+    variables:
+        origin_path: '{{arg1}}'
+    source: ls -l --color=always {{origin_path}} | sed 1d
+    options:
+        - multi
+        - reverse
+        - header='$(readlink -e {{origin_path}})'
+        - query={{arg2}}
+        - preview='file {-1}'
+    post_operations:
+        enter:
+            - pipe: grep -o '\S\+$'
+            - join
